@@ -1,0 +1,42 @@
+# Centpkg
+Centpkg is a wrapper for [rpkg](https://fedorahosted.org/rpkg/) which interacts
+with RPM git repositories like the ones hosted at http://git.centos.org. Rpkg provides
+some convenience methods/commands for local builds via mock or rpmbuild, for
+interacting with koji, and for generating patches.
+
+# Centpkg is in pre-alpha state, as of now this is a proof of concept.
+For now only a very small subset of rpkg commands are enabled. 
+
+
+
+## Installing
+Centpkg currently requires the [EPEL](https://fedoraproject.org/wiki/EPEL) repository for pyrpkg and other dependencies. 
+
+    root# <Install and configure EPEL-Release>
+    root# yum install pyrpkg
+    root# git clone https://bitbucket.org/bstinsonmhk/centpkg.git
+    root# cd centpkg
+    root# python setup.py install
+
+## Currently Somewhat-working Commands
+### Clone 
+    
+    $ centpkg clone --anonymous -b c7 a2ps        # clones the CentOS 7 branch of the a2ps package
+
+### Sources
+
+    $ cd a2ps                                     # Change to the directory we just cloned
+    $ centpkg sources                             # Downloads the binary sources from lookaside and checks hashes
+
+## Commands Currently in Development
+### Firehose
+*WARNING*: this will download _all_ repositories from git.centos.org
+
+    # Downloads all source repos and switches to the CentOS 7 Branch. 
+    # If --sources is specified get the sources too. 
+    $ centpkg firehose --anonymous -b c7 [--sources]
+
+## License
+
+Unless otherwise specified, all files are licensed under GPLv2+.
+See COPYING for more license information
