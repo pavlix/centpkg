@@ -1,0 +1,57 @@
+#!/usr/bin/env python
+import pdb
+
+import os
+import sys
+import logging
+import ConfigParser
+import argparse
+
+import pyrpkg
+import centpkg
+
+def main():
+    parser = argparse.ArgumentParser(add_help=False)
+    parser.add_argument('-C','--config', help='The rpkg config file to use',
+                        default='/etc/rpkg/centpkg.conf')
+
+    (args, other) = parser.parse_known_args()
+
+    # Make sure we have a sane config file
+    if not os.path.exists(args.config) and not other[-1] in ['--help', '-h']:
+        sys.stderr.write('Invalid config file %s\n' % args.config)
+        sys.exit(1)
+
+    config = ConfigParser.SafeConfigParser()
+    config.read(args.config)
+
+    client = centpkg.cli.centpkgClient(config)
+    client.do_imports(site='centpkg')
+    client.parse_cmdline()
+
+    if not client.args.path:
+        try:
+            client.args.path=os.getcwd()
+        except:
+            print('Could not get current path')
+            sys.exit(1)
+
+
+    log = pyrpkg.log
+    client.setupLogging(log)
+
+    if client.args.v:
+        log.setLevel(logging.DEBUG)
+    elif client.args.q:
+        log.setLevel(logging.WARNING)
+    else:
+        log.setLevel(logging.INFO)
+
+    # Run the necessary command
+    try:
+        sys.exit(client.args.command())
+    except KeyboardInterrupt:
+        pass
+
+if __name__ == '__main__':
+    main()
