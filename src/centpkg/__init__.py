@@ -1,4 +1,6 @@
 import pyrpkg
+import os
+import re
 
 from . import cli
 
@@ -13,6 +15,48 @@ class Commands(pyrpkg.Commands):
                                       branchre, kojiconfig, build_client,
                                       user, dist, target,
                                       quiet)
+
+
+    # redefined loaders
+    def load_rpmdefines(self):
+        try:
+            osver = re.search(r'\d.*$', self.branch_merge).group()
+        except AttributeError:
+            raise pyrpkg.rpkgError('Could not find the base OS ver from branch name'
+                            ' %s' % self.branch_merge)
+        self._distval = osver
+        self._distval = self._distval.replace('.', '_')
+        self._disttag = 'el%s' % self._distval
+        self._rpmdefines = ["--define '_sourcedir %s'" % os.path.join(self.path,'SOURCES'),
+                            "--define '_specdir %s'" % os.path.join(self.path,'SPECS'),
+                            "--define '_builddir %s'" % os.path.join(self.path,'BUILD'),
+                            "--define '_srcrpmdir %s'" % os.path.join(self.path,'SRPMS'),
+                            "--define '_rpmdir %s'" % os.path.join(self.path, 'RPMS'),
+                            "--define 'dist .%s'" % self._disttag,
+                            # int and float this to remove the decimal
+                            "--define '%s 1'" % self._disttag]
+
+    def load_spec(self):
+        """This sets the spec attribute"""
+
+        # We are not using the upstream load_spec because the file structure is
+        # hard-coded
+
+        deadpackage = False
+
+        # Get a list of files in the path we're looking at
+        files = os.listdir(os.path.join(self.path,'SPECS'))
+        # Search the files for the first one that ends with ".spec"
+        for f in files:
+            if f.endswith('.spec') and not f.startswith('.'):
+                self._spec = os.path.join('SPECS',f)
+                return
+            if f == 'dead.package':
+                deadpackage = True
+        if deadpackage:
+            raise pyrpkg.rpkgError('No spec file found. This package is retired')
+        else:
+            raise pyrpkg.rpkgError('No spec file found.')
 
 
     # These are the commands defined in the base pyrpkg.Commands class
