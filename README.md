@@ -1,8 +1,6 @@
--*- markdown -*-
-
 # Centpkg
 Centpkg is a wrapper for [rpkg](https://fedorahosted.org/rpkg/) which interacts
-with RPM git repositories like the ones hosted at http://git.centos.org. Rpkg provides
+with RPM git repositories like the ones hosted at http://git.centos.org. Rpkg also provides
 some convenience methods/commands for local builds via mock or rpmbuild, for
 interacting with koji, and for generating patches.
 
