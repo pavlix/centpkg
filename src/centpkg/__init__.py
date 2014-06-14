@@ -70,7 +70,7 @@ class Commands(pyrpkg.Commands):
         raise NotImplementedError("This command is not yet implemented in centpkg")
 
     def clone(self, *args, **kwargs):
-        raise NotImplementedError("This command is not yet implemented in centpkg")
+        super(Commands,self).clone(*args, **kwargs)
 
     def clone_with_dirs(self, *args, **kwargs):
         raise NotImplementedError("This command is not yet implemented in centpkg")
