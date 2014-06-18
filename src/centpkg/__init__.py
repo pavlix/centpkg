@@ -27,14 +27,10 @@ class Commands(pyrpkg.Commands):
         self._distval = osver
         self._distval = self._distval.replace('.', '_')
         self._disttag = 'el%s' % self._distval
-        self._rpmdefines = ["--define '_sourcedir %s'" % os.path.join(self.path,'SOURCES'),
-                            "--define '_specdir %s'" % os.path.join(self.path,'SPECS'),
-                            "--define '_builddir %s'" % os.path.join(self.path,'BUILD'),
-                            "--define '_srcrpmdir %s'" % os.path.join(self.path,'SRPMS'),
-                            "--define '_rpmdir %s'" % os.path.join(self.path, 'RPMS'),
-                            "--define 'dist .%s'" % self._disttag,
+        self._rpmdefines = ["--define '_topdir {0}'".format(self.path),
+                            "--define 'dist .{0}'".format(self._disttag),
                             # int and float this to remove the decimal
-                            "--define '%s 1'" % self._disttag]
+                            "--define '{0} 1'".format(self._disttag)]
 
     def load_spec(self):
         """This sets the spec attribute"""
