@@ -38,8 +38,6 @@ class Commands(pyrpkg.Commands):
         # We are not using the upstream load_spec because the file structure is
         # hard-coded
 
-        deadpackage = False
-
         # Get a list of files in the path we're looking at
         files = os.listdir(os.path.join(self.path,'SPECS'))
         # Search the files for the first one that ends with ".spec"
@@ -47,12 +45,8 @@ class Commands(pyrpkg.Commands):
             if f.endswith('.spec') and not f.startswith('.'):
                 self._spec = os.path.join('SPECS',f)
                 return
-            if f == 'dead.package':
-                deadpackage = True
-        if deadpackage:
-            raise pyrpkg.rpkgError('No spec file found. This package is retired')
-        else:
-            raise pyrpkg.rpkgError('No spec file found.')
+
+        raise pyrpkg.rpkgError('No spec file found.')
 
 
     # These are the commands defined in the base pyrpkg.Commands class
