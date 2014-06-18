@@ -116,7 +116,7 @@ class Commands(pyrpkg.Commands):
                 # This strip / split is kind a ugly, but checksums shouldn't have
                 # two spaces in them.  sources file might need more structure in the
                 # future
-                csum, file = map(str.strip, archive.strip().split(' ', 1))
+                csum, file = archive.strip().split(None, 1)
             except ValueError:
                 raise pyrpkg.rpkgError('Malformed sources file.')
             # See if we already have a valid copy downloaded
