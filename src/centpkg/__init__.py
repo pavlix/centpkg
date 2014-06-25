@@ -1,3 +1,21 @@
+#pylint: disable=line-too-long,abstract-class-not-used
+'''
+    Top level function library for centpkg
+'''
+#
+# Author(s):
+#            Jesse Keating <jkeating@redhat.com>
+#            Pat Riehecky <riehecky@fnal.gov>
+#            Brian Stinson <bstinson@ksu.edu>
+#
+# This program is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by the
+# Free Software Foundation; either version 2 of the License, or (at your
+# option) any later version.  See http://www.gnu.org/copyleft/gpl.html for
+# the full text of the license.
+
+
+
 import pyrpkg
 import os
 import re
@@ -5,20 +23,26 @@ import re
 from . import cli
 
 class Commands(pyrpkg.Commands):
+    '''
+        For the pyrpkg commands with centpkg behavior
+    '''
     def __init__(self, path, lookaside, lookasidehash, lookaside_cgi,
                  gitbaseurl, anongiturl, branchre, kojiconfig,
                  build_client, user=None, dist=None, target=None,
                  quiet=False):
-
-        super(Commands,self).__init__(path, lookaside, lookasidehash,
+        '''
+            Init the object and some configuration details.
+        '''
+        super(Commands, self).__init__(path, lookaside, lookasidehash,
                                       lookaside_cgi, gitbaseurl, anongiturl,
                                       branchre, kojiconfig, build_client,
-                                      user, dist, target,
-                                      quiet)
-
+                                      user, dist, target, quiet)
 
     # redefined loaders
     def load_rpmdefines(self):
+        '''
+            Populate rpmdefines based on branch data
+        '''
         try:
             osver = re.search(r'\d.*$', self.branch_merge).group()
         except AttributeError:
@@ -41,15 +65,76 @@ class Commands(pyrpkg.Commands):
         # Get a list of files in the path we're looking at
         files = os.listdir(os.path.join(self.path,'SPECS'))
         # Search the files for the first one that ends with ".spec"
-        for f in files:
-            if f.endswith('.spec') and not f.startswith('.'):
-                self._spec = os.path.join('SPECS',f)
+        for __f in files:
+            if __f.endswith('.spec') and not __f.startswith('.'):
+                self._spec = os.path.join('SPECS', __f)
                 return
 
         raise pyrpkg.rpkgError('No spec file found.')
 
+    # These are the commands defined in the base pyrpkg.Commands class
+    # and have been implemented here
+    def clone(self, *args, **kwargs):
+        super(Commands, self).clone(*args, **kwargs)
+
+    def sources(self, outdir=None):
+        """Download source files"""
+
+        # in 'super' the sources function expects a file named 'sources' to be in the base directory.
+        # A patch has been sent to upstream to allow a more flexible location.
+        #
+        # This code doesn't work due to:
+        #              archive.strip().split('  ', 1) # patch provided to upstream to fix
+        #
+        #              url = '%s/%s/%s/%s/%s' % (self.lookaside, self.module_name,
+        #                                        file.replace(' ', '%20'),
+        #                                        csum, file.replace(' ', '%20'))
+        #
+        #os.symlink(os.path.join(self.path, '.{0}.metadata'.format(self.module_name)), os.path.join(self.path, 'sources'))
+        #super(Commands, self).sources(outdir=None)
+        #os.unlink(os.path.join(self.path, 'sources'))
+
+        # The following is copied from rpkg/__init__.py:sources with minor changes
+        try:
+            archives = open(os.path.join(self.path,
+                                         '.{0}.metadata'.format(self.module_name)),
+                            'r').readlines()
+        except IOError, e:
+            raise pyrpkg.rpkgError('%s is not a valid repo: %s' % (self.path, e))
+        # Default to putting the files where the module is
+        if not outdir:
+            outdir = self.path
+        for archive in archives:
+            try:
+                # This strip / split is kind a ugly, but checksums shouldn't have
+                # two spaces in them.  sources file might need more structure in the
+                # future
+                csum, file = archive.strip().split(None, 1)
+            except ValueError:
+                raise pyrpkg.rpkgError('Malformed sources file.')
+            # See if we already have a valid copy downloaded
+            outfile = os.path.join(outdir, file)
+            if os.path.exists(outfile):
+                if self._verify_file(outfile, csum, self.lookasidehash):
+                    continue
+            self.log.info("Downloading %s" % (file))
+            url = '%s/%s/%s/%s' % (self.lookaside, self.module_name,
+                                      self.branch_merge,
+                                      csum,
+                                      )
+            command = ['curl', '-H', 'Pragma:', '-o', outfile, '-R', '-S', '--fail']
+            if self.quiet:
+                command.append('-s')
+            command.append(url)
+            self._run_command(command)
+            if not self._verify_file(outfile, csum, self.lookasidehash):
+                raise pyrpkg.rpkgError('%s failed checksum' % file)
+
+        return
 
     # These are the commands defined in the base pyrpkg.Commands class
+    # and have not been implemented here, yet
+
     def load_kojisession(self, *args, **kwargs):
         raise NotImplementedError("This command is not yet implemented in centpkg")
 
@@ -58,9 +143,6 @@ class Commands(pyrpkg.Commands):
 
     def clean(self, *args, **kwargs):
         raise NotImplementedError("This command is not yet implemented in centpkg")
-
-    def clone(self, *args, **kwargs):
-        super(Commands,self).clone(*args, **kwargs)
 
     def clone_with_dirs(self, *args, **kwargs):
         raise NotImplementedError("This command is not yet implemented in centpkg")
@@ -94,70 +176,6 @@ class Commands(pyrpkg.Commands):
 
     def push(self, *args, **kwargs):
         raise NotImplementedError("This command is not yet implemented in centpkg")
-
-    def sources(self, outdir=None):
-        """Download source files"""
-
-        # We are not using sources() in super because the metadata file is
-        # hard-coded into the first open() call. Otherwise this is copied from
-        # upstream pyrpkg
-
-        try:
-            archives = open(os.path.join(self.path,
-                                         '.{0}.metadata'.format(self.module_name)),
-                            'r').readlines()
-        except IOError, e:
-            raise pyrpkg.rpkgError('%s is not a valid repo: %s' % (self.path, e))
-        # Default to putting the files where the module is
-        if not outdir:
-            outdir = self.path
-        for archive in archives:
-            try:
-                # This strip / split is kind a ugly, but checksums shouldn't have
-                # two spaces in them.  sources file might need more structure in the
-                # future
-                csum, file = archive.strip().split(None, 1)
-            except ValueError:
-                raise pyrpkg.rpkgError('Malformed sources file.')
-            # See if we already have a valid copy downloaded
-            outfile = os.path.join(outdir, file)
-            if os.path.exists(outfile):
-                if self._verify_file(outfile, csum, self.lookasidehash):
-                    continue
-            self.log.info("Downloading %s" % (file))
-            url = '%s/%s/%s/%s' % (self.lookaside, self.module_name,
-                                      self.branch_merge,
-                                      csum,
-                                      )
-            # There is some code here for using pycurl, but for now,
-            # just use subprocess
-            #output = open(file, 'wb')
-            #curl = pycurl.Curl()
-            #curl.setopt(pycurl.URL, url)
-            #curl.setopt(pycurl.FOLLOWLOCATION, 1)
-            #curl.setopt(pycurl.MAXREDIRS, 5)
-            #curl.setopt(pycurl.CONNECTTIMEOUT, 30)
-            #curl.setopt(pycurl.TIMEOUT, 300)
-            #curl.setopt(pycurl.WRITEDATA, output)
-            #try:
-            #    curl.perform()
-            #except:
-            #    print "Problems downloading %s" % url
-            #    curl.close()
-            #    output.close()
-            #    return 1
-            #curl.close()
-            #output.close()
-            # These options came from Makefile.common.
-            # Probably need to support wget as well
-            command = ['curl', '-H', 'Pragma:', '-o', outfile, '-R', '-S', '--fail']
-            if self.quiet:
-                command.append('-s')
-            command.append(url)
-            self._run_command(command)
-            if not self._verify_file(outfile, csum, self.lookasidehash):
-                raise pyrpkg.rpkgError('%s failed checksum' % file)
-        return
 
     def switch_branch(self, *args, **kwargs):
         raise NotImplementedError("This command is not yet implemented in centpkg")

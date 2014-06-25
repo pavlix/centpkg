@@ -1,5 +1,5 @@
 '''
-    Command line behavior for centpkg
+    The main behavior of centpkg
 '''
 #
 # Author(s):
@@ -13,24 +13,35 @@
 # option) any later version.  See http://www.gnu.org/copyleft/gpl.html for
 # the full text of the license.
 
-import sys
 import os
+import sys
 import logging
+import ConfigParser
+import argparse
 
-from pyrpkg.cli import cliClient
+import pyrpkg
+import centpkg
 
-class centpkgClient(cliClient):
+def main():
     '''
-        Where we import our custom stuff
+        Where things actually happen
     '''
-    def __init__(self, config, name='centpkg'):
-        '''init'''
-        super(centpkgClient, self).__init__(config, name)
+    parser = argparse.ArgumentParser(add_help=False)
+    parser.add_argument('-C', '--config', help='The rpkg config file to use',
+                        default='/etc/rpkg/centpkg.conf')
 
+    (args, other) = parser.parse_known_args()
 
-if __name__ == '__main__':
-    client = centpkgClient()
-    client.do_imports()
+    # Make sure we have a sane config file
+    if not os.path.exists(args.config) and not other[-1] in ['--help', '-h']:
+        sys.stderr.write('Invalid config file %s\n' % args.config)
+        sys.exit(1)
+
+    config = ConfigParser.SafeConfigParser()
+    config.read(args.config)
+
+    client = centpkg.cli.centpkgClient(config)
+    client.do_imports(site='centpkg')
     client.parse_cmdline()
 
     if not client.args.path:
@@ -41,7 +52,7 @@ if __name__ == '__main__':
             print(err_msg)
             sys.exit(1)
 
-    log = client.site.log
+    log = pyrpkg.log
     client.setupLogging(log)
 
     if client.args.v:
@@ -53,6 +64,9 @@ if __name__ == '__main__':
 
     # Run the necessary command
     try:
-        client.args.command()
+        sys.exit(client.args.command())
     except KeyboardInterrupt:
         pass
+
+if __name__ == '__main__':
+    main()
