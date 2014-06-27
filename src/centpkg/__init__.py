@@ -74,8 +74,6 @@ class Commands(pyrpkg.Commands):
 
     # These are the commands defined in the base pyrpkg.Commands class
     # and have been implemented here
-    def clone(self, *args, **kwargs):
-        super(Commands, self).clone(*args, **kwargs)
 
     def sources(self, outdir=None):
         """Download source files"""
@@ -138,21 +136,6 @@ class Commands(pyrpkg.Commands):
     def load_kojisession(self, *args, **kwargs):
         raise NotImplementedError("This command is not yet implemented in centpkg")
 
-    def add_tag(self, *args, **kwargs):
-        raise NotImplementedError("This command is not yet implemented in centpkg")
-
-    def clean(self, *args, **kwargs):
-        raise NotImplementedError("This command is not yet implemented in centpkg")
-
-    def clone_with_dirs(self, *args, **kwargs):
-        raise NotImplementedError("This command is not yet implemented in centpkg")
-
-    def commit(self, *args, **kwargs):
-        raise NotImplementedError("This command is not yet implemented in centpkg")
-
-    def delete_tag(self, *args, **kwargs):
-        raise NotImplementedError("This command is not yet implemented in centpkg")
-
     def get_latest_commit(self, *args, **kwargs):
         raise NotImplementedError("This command is not yet implemented in centpkg")
 
@@ -162,22 +145,13 @@ class Commands(pyrpkg.Commands):
     def import_srpm(self, *args, **kwargs):
         raise NotImplementedError("This command is not yet implemented in centpkg")
 
-    def list_tag(self, *args, **kwargs):
-        raise NotImplementedError("This command is not yet implemented in centpkg")
-
     def new(self, *args, **kwargs):
         raise NotImplementedError("This command is not yet implemented in centpkg")
 
     def patch(self, *args, **kwargs):
         raise NotImplementedError("This command is not yet implemented in centpkg")
 
-    def pull(self, *args, **kwargs):
-        raise NotImplementedError("This command is not yet implemented in centpkg")
-
     def push(self, *args, **kwargs):
-        raise NotImplementedError("This command is not yet implemented in centpkg")
-
-    def switch_branch(self, *args, **kwargs):
         raise NotImplementedError("This command is not yet implemented in centpkg")
 
     def file_exists(self, *args, **kwargs):
@@ -192,12 +166,6 @@ class Commands(pyrpkg.Commands):
     def clog(self, *args, **kwargs):
         raise NotImplementedError("This command is not yet implemented in centpkg")
 
-    def compile(self, *args, **kwargs):
-        raise NotImplementedError("This command is not yet implemented in centpkg")
-
-    def giturl(self, *args, **kwargs):
-        raise NotImplementedError("This command is not yet implemented in centpkg")
-
     def koji_upload(self, *args, **kwargs):
         raise NotImplementedError("This command is not yet implemented in centpkg")
 
@@ -205,9 +173,6 @@ class Commands(pyrpkg.Commands):
         raise NotImplementedError("This command is not yet implemented in centpkg")
 
     def lint(self, *args, **kwargs):
-        raise NotImplementedError("This command is not yet implemented in centpkg")
-
-    def local(self, *args, **kwargs):
         raise NotImplementedError("This command is not yet implemented in centpkg")
 
     def mock_config(self, *args, **kwargs):
@@ -228,5 +193,3 @@ class Commands(pyrpkg.Commands):
     def unused_patches(self, *args, **kwargs):
         raise NotImplementedError("This command is not yet implemented in centpkg")
 
-    def verify_files(self, *args, **kwargs):
-        raise NotImplementedError("This command is not yet implemented in centpkg")
