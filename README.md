@@ -12,10 +12,10 @@ tracebacks during development.
 
 
 
-## Installing
+## Installing from Git
 Centpkg currently requires the [EPEL](https://fedoraproject.org/wiki/EPEL) repository for pyrpkg and other dependencies. 
 
-    root# <Install and configure EPEL-Release>
+    root# <Download and configure the relevant epel-release RPM>
     root# yum install pyrpkg
     root# git clone https://bitbucket.org/bstinsonmhk/centpkg.git
     root# cd centpkg
@@ -36,10 +36,11 @@ Centpkg currently requires the [EPEL](https://fedoraproject.org/wiki/EPEL) repos
     $ centpkg sources                             # Downloads the binary sources from lookaside and checks hashes
     $ centpkg clean                               # Removes untracked files
 
-### rpmbuild Operations
+### Build Operations
     $ centpkg local                               # Runs a full rpmbuild
     $ centpkg compile                             # Runs rpmbuild -bc
     $ centpkg verify-files                        # Runs rpmbuild -bl
+    $ centpkg mockbuild                           # Runs a local mockbuild
 
 ## License
 
