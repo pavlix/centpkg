@@ -67,6 +67,9 @@ def main():
         sys.exit(client.args.command())
     except KeyboardInterrupt:
         pass
+    except Exception, e:
+        log.error('Could not execute %s: %s' % (client.args.command.__name__, e))
+        sys.exit(1)
 
 if __name__ == '__main__':
     main()
