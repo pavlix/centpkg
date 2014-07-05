@@ -78,6 +78,9 @@ class Commands(pyrpkg.Commands):
     def sources(self, outdir=None):
         """Download source files"""
 
+        #  See also:
+        # https://lists.fedoraproject.org/pipermail/buildsys/2014-July/004313.html
+        #
         # in 'super' the sources function expects a file named 'sources' to be in the base directory.
         # A patch has been sent to upstream to allow a more flexible location.
         #
