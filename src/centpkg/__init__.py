@@ -231,9 +231,6 @@ class Commands(pyrpkg.Commands):
     def mock_config(self, *args, **kwargs):
         raise NotImplementedError("This command is not yet implemented in centpkg")
 
-    def mockbuild(self, *args, **kwargs):
-        raise NotImplementedError("This command is not yet implemented in centpkg")
-
     def upload(self, *args, **kwargs):
         raise NotImplementedError("This command is not yet implemented in centpkg")
 
