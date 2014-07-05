@@ -113,8 +113,20 @@ class Commands(pyrpkg.Commands):
                 csum, file = archive.strip().split(None, 1)
             except ValueError:
                 raise pyrpkg.rpkgError('Malformed sources file.')
-            # See if we already have a valid copy downloaded
+
+            # If a directory is specified in the metadata file, append it to
+            # outdir
+            if os.path.dirname(file):
+                outdir = os.path.join(self.path, os.path.dirname(file))
+                file = os.path.basename(file)
+
+            # Create the output directory if it's not checked into git
+            if not os.path.exists(outdir):
+                self.log.info("Creating OUTDIR: {0}".format(outdir))
+                os.makedirs(outdir)
+
             outfile = os.path.join(outdir, file)
+            # See if we already have a valid copy downloaded
             if os.path.exists(outfile):
                 if self._verify_file(outfile, csum, self.lookasidehash):
                     continue
