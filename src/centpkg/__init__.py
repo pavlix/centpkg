@@ -72,6 +72,13 @@ class Commands(pyrpkg.Commands):
 
         raise pyrpkg.rpkgError('No spec file found.')
 
+    def load_target(self):
+        """ This sets the target attribute (used for mock and koji) """
+        # This is a hack, eventually we will want to use non-epel mock configs
+        # We use the epel configs for now because they are the only distributed
+        # mock configs that build against EL mock trees
+        self._target = 'epel-{0}'.format(self.distval)
+
     # These are the commands defined in the base pyrpkg.Commands class
     # and have been implemented here
 
