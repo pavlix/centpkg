@@ -52,6 +52,8 @@ class Commands(pyrpkg.Commands):
         self._distval = self._distval.replace('.', '_')
         self._disttag = 'el%s' % self._distval
         self._rpmdefines = ["--define '_topdir {0}'".format(self.path),
+                            "--define '_srcrpmdir {0}'".format(self.path),
+                            "--define '_rpmdir {0}'".format(self.path),
                             "--define 'dist .{0}'".format(self._disttag),
                             # int and float this to remove the decimal
                             "--define '{0} 1'".format(self._disttag)]
