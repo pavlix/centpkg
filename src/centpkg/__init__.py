@@ -20,6 +20,7 @@ import pyrpkg
 import os
 import re
 
+from . import centos_cert
 from . import cli
 
 class Commands(pyrpkg.Commands):

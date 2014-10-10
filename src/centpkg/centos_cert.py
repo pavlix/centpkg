@@ -1,9 +1,4 @@
 import os
-import sys
-import getpass
-from fedora.client.fas2 import AccountSystem
-from fedora.client.fas2 import CLAError
-from fedora.client import AuthError, ServerError
 from OpenSSL import crypto
 import urlgrabber
 import datetime
@@ -13,7 +8,7 @@ import datetime
 
 
 # Define our own error class
-class fedora_cert_error(Exception):
+class centos_cert_error(Exception):
     pass
 
 def _open_cert():
@@ -23,7 +18,7 @@ def _open_cert():
      # Make sure we can even read the thing.
     cert_file = os.path.join(os.path.expanduser('~'), ".koji", "client.crt")
     if not os.access(cert_file, os.R_OK):
-        raise fedora_cert_error("""!!!    cannot read your ~/.fedora.cert file   !!!
+        raise centos_cert_error("""!!!    cannot read your centos cert file   !!!
 !!! Ensure the file is readable and try again !!!""")
     raw_cert = open(cert_file).read()
     my_cert = crypto.load_certificate(crypto.FILETYPE_PEM, raw_cert)
@@ -31,7 +26,7 @@ def _open_cert():
 
 def verify_cert():
     """
-    Check that the user cert is valid. 
+    Check that the user cert is valid.
     things to check/return
     not revoked
     Expiry time warn if less than 21 days
@@ -39,7 +34,8 @@ def verify_cert():
     my_cert = _open_cert()
     serial_no = my_cert.get_serial_number()
     valid_until = my_cert.get_notAfter()[:8]
-    crl = urlgrabber.urlread("https://admin.fedoraproject.org/ca/crl.pem")
+    # CRL verification would go here
+    #crl = urlgrabber.urlread("https://<url_to_crl>/ca/crl.pem")
     dateFmt = '%Y%m%d'
     delta = datetime.datetime.now() + datetime.timedelta(days=21)
     warn = datetime.datetime.strftime(delta, dateFmt)
@@ -52,7 +48,7 @@ def verify_cert():
 
 def certificate_expired():
     """
-    Check to see if ~/.fedora.cert is expired
+    Check to see if client cert is expired
     Returns True or False
 
     """
@@ -65,7 +61,7 @@ def certificate_expired():
 
 def read_user_cert():
     """
-    Figure out the Fedora user name from ~/.fedora.cert
+    Figure out the Fedora user name from client cert
 
     """
     my_cert = _open_cert()
@@ -76,27 +72,3 @@ def read_user_cert():
     username = cn_parts[0]
     return username
 
-def create_user_cert(username=None):
-    if not username:
-        username = raw_input('FAS Username: ')
-    password = getpass.getpass('FAS Password: ')
-    try:
-        fas = AccountSystem('https://admin.fedoraproject.org/accounts/', username=username, password=password)
-    except AuthError:
-        raise fedora_cert_error("Invalid username/password.")
-
-    try:
-        cert = fas.user_gencert()
-        fas.logout()
-    except CLAError:
-        fas.logout()
-        raise fedora_cert_error("""You must sign the CLA before you can generate your certificate.\n
-To do this, go to https://admin.fedoraproject.org/accounts/cla/""")
-    cert_file = os.path.join(os.path.expanduser('~'), ".fedora.cert")
-    try:
-        FILE = open(cert_file,"w")
-        FILE.write(cert)
-        FILE.close()
-    except:
-        raise fedora_cert_error("""Can not open cert file for writing.
-Please paste certificate into ~/.fedora.cert\n\n%s""" % cert)
