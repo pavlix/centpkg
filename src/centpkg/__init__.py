@@ -189,56 +189,50 @@ class Commands(pyrpkg.Commands):
     # and have not been implemented here, yet
 
     def load_kojisession(self, *args, **kwargs):
-        raise NotImplementedError("This command is not yet implemented in centpkg")
+        raise NotImplementedError("load_kojisession is not yet implemented in centpkg")
 
     def get_latest_commit(self, *args, **kwargs):
-        raise NotImplementedError("This command is not yet implemented in centpkg")
+        raise NotImplementedError("get_latest_commit is not yet implemented in centpkg")
 
     def gitbuildhash(self, *args, **kwargs):
-        raise NotImplementedError("This command is not yet implemented in centpkg")
+        raise NotImplementedError("gitbuildhash is not yet implemented in centpkg")
 
     def import_srpm(self, *args, **kwargs):
-        raise NotImplementedError("This command is not yet implemented in centpkg")
+        raise NotImplementedError("import_srpm is not yet implemented in centpkg")
 
     def new(self, *args, **kwargs):
-        raise NotImplementedError("This command is not yet implemented in centpkg")
+        raise NotImplementedError("new is not yet implemented in centpkg")
 
     def patch(self, *args, **kwargs):
-        raise NotImplementedError("This command is not yet implemented in centpkg")
+        raise NotImplementedError("patch is not yet implemented in centpkg")
 
     def push(self, *args, **kwargs):
-        raise NotImplementedError("This command is not yet implemented in centpkg")
+        raise NotImplementedError("push is not yet implemented in centpkg")
 
     def file_exists(self, *args, **kwargs):
-        raise NotImplementedError("This command is not yet implemented in centpkg")
+        raise NotImplementedError("file_exists is not yet implemented in centpkg")
 
     def upload_file(self, *args, **kwargs):
-        raise NotImplementedError("This command is not yet implemented in centpkg")
-
-    def build(self, *args, **kwargs):
-        raise NotImplementedError("This command is not yet implemented in centpkg")
+        raise NotImplementedError("upload_file is not yet implemented in centpkg")
 
     def clog(self, *args, **kwargs):
-        raise NotImplementedError("This command is not yet implemented in centpkg")
-
-    def koji_upload(self, *args, **kwargs):
-        raise NotImplementedError("This command is not yet implemented in centpkg")
+        raise NotImplementedError("clog is not yet implemented in centpkg")
 
     def install(self, *args, **kwargs):
-        raise NotImplementedError("This command is not yet implemented in centpkg")
+        raise NotImplementedError("install is not yet implemented in centpkg")
 
     def lint(self, *args, **kwargs):
-        raise NotImplementedError("This command is not yet implemented in centpkg")
+        raise NotImplementedError("lint is not yet implemented in centpkg")
 
     def mock_config(self, *args, **kwargs):
-        raise NotImplementedError("This command is not yet implemented in centpkg")
+        raise NotImplementedError("mock_config command is not yet implemented in centpkg")
 
     def upload(self, *args, **kwargs):
-        raise NotImplementedError("This command is not yet implemented in centpkg")
+        raise NotImplementedError("upload is not yet implemented in centpkg")
 
     def prep(self, *args, **kwargs):
-        raise NotImplementedError("This command is not yet implemented in centpkg")
+        raise NotImplementedError("prep is not yet implemented in centpkg")
 
     def unused_patches(self, *args, **kwargs):
-        raise NotImplementedError("This command is not yet implemented in centpkg")
+        raise NotImplementedError("unused_patches is not yet implemented in centpkg")
 
