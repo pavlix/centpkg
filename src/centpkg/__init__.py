@@ -156,9 +156,6 @@ class Commands(pyrpkg.Commands):
         return
 
 
-    def load_kojisession(self, *args, **kwargs):
-        raise NotImplementedError("load_kojisession is not yet implemented in centpkg")
-
     def get_latest_commit(self, *args, **kwargs):
         raise NotImplementedError("get_latest_commit is not yet implemented in centpkg")
 
