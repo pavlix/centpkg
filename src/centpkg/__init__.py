@@ -93,6 +93,12 @@ class Commands(pyrpkg.Commands):
             # sig packages are built in the tag that matches the git branch
             self._target = '{0}-el{1}'.format(self.branch_merge, self.distval)
 
+    def load_user(self):
+        try:
+            self._user = centos_cert.read_user_cert()
+        except Exception, e:
+            super(Commands, self).load_user()
+
     # These are the commands defined in the base pyrpkg.Commands class
     # and have been implemented here
 
