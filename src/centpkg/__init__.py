@@ -155,39 +155,6 @@ class Commands(pyrpkg.Commands):
 
         return
 
-    def srpm(self, hashtype=None):
-        """Create an srpm using hashtype from content in the module
-
-        Requires sources already downloaded.
-        """
-
-        # This line is what changed for centpkg, in Fedora the directory
-        # structure is flat, in CentOS we use the proper SRPMS/ directory for
-        # our source RPMs 
-        self.srpmname = os.path.join(self.path, 'SRPMS',
-                            "{0}-{1}-{2}.src.rpm".format(self.module_name,
-                                                  self.ver, self.rel))
-        # See if we need to build the srpm
-        if os.path.exists(self.srpmname):
-            self.log.debug('Srpm found, rewriting it.')
-
-        cmd = ['rpmbuild']
-        cmd.extend(self.rpmdefines)
-        if self.quiet:
-            cmd.append('--quiet')
-        # Figure out which hashtype to use, if not provided one
-        if not hashtype:
-            # Try to determine the dist
-            hashtype = self._guess_hashtype()
-        # This may need to get updated if we ever change our checksum default
-        if not hashtype == 'sha256':
-            cmd.extend(["--define '_source_filedigest_algorithm %s'" % hashtype,
-                    "--define '_binary_filedigest_algorithm %s'" % hashtype])
-        cmd.extend(['--nodeps', '-bs', os.path.join(self.path, self.spec)])
-        self._run_command(cmd, shell=True)
-
-    # These are the commands defined in the base pyrpkg.Commands class
-    # and have not been implemented here, yet
 
     def load_kojisession(self, *args, **kwargs):
         raise NotImplementedError("load_kojisession is not yet implemented in centpkg")
