@@ -83,10 +83,15 @@ class Commands(pyrpkg.Commands):
 
     def load_target(self):
         """ This sets the target attribute (used for mock and koji) """
-        # This is a hack, eventually we will want to use non-epel mock configs
-        # We use the epel configs for now because they are the only distributed
-        # mock configs that build against EL mock trees
-        self._target = 'epel-{0}'.format(self.distval)
+
+        # Distribution branches start with c and may or may not end in -plus
+        # otherwise, it's a sig branch 
+        if not self._is_sigbranch():
+            # send distribution packages to build on the the bananas tags for now
+            self._target = 'bananas{0}-{1}'.format(self.distval, self.disttag)
+        else:
+            # sig packages are built in the tag that matches the git branch
+            self._target = '{0}-el{1}'.format(self.branch_merge, self.distval)
 
     # These are the commands defined in the base pyrpkg.Commands class
     # and have been implemented here
