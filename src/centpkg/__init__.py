@@ -141,6 +141,18 @@ class Commands(pyrpkg.Commands):
             except ValueError:
                 raise pyrpkg.rpkgError('Malformed sources file.')
 
+            # The default lookaside hash is stored in centpkg.conf, but there is
+            # a mix of md5 and sha sums in the CentOS lookaside, here we divine
+            # which one we are using
+
+            sum_lengths = { 128: 'sha512',
+                            64: 'sha256',
+                            40: 'sha1',
+                            32: 'md5',
+                          }
+
+            self.lookasidehash = sum_lengths[len(csum)]
+
             # If a directory is specified in the metadata file, append it to
             # outdir
             if os.path.dirname(file):
