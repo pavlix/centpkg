@@ -39,6 +39,12 @@ class Commands(pyrpkg.Commands):
                                       branchre, kojiconfig, build_client,
                                       user, dist, target, quiet)
 
+    def _is_sigbranch(self):
+        # if the current branch is not in the form c<version>, c<version>-plus,
+        # or c<version>-extras it's a sig branch
+
+        return not re.match('^c\d(-plus|-extras)*$', self.branch_merge)
+
     # redefined loaders
     def load_rpmdefines(self):
         '''
