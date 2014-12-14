@@ -58,10 +58,7 @@ class Commands(pyrpkg.Commands):
         self._distval = osver
         self._distval = self._distval.replace('.', '_')
 
-        if self._is_sigbranch():
-            self._disttag = self.branch_merge
-        else:
-            self._disttag = 'el%s' % self._distval
+        self._disttag = 'el%s' % self._distval
 
         self._rpmdefines = ["--define '_topdir {0}'".format(self.path),
                             "--define '_srcrpmdir {0}'".format(self.path),
