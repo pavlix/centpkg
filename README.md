@@ -10,37 +10,18 @@ For now only a very small subset of rpkg commands are enabled.
 Exception handling at the top level has been disabled for now to get better
 tracebacks during development. 
 
+## Current workflow
+For a sig working on a package in git.centos.org, the following workflow is
+recommended:
 
+    # In this example a member of the virt sig would like to scratch-build a2ps on EL6
+    $ centpkg clone -b virt6 a2ps
+    $ cd a2ps
+    $ centpkg build --srpm --scratch 
 
-## Installing from Git
-Centpkg currently requires the [EPEL](https://fedoraproject.org/wiki/EPEL) repository for pyrpkg and other dependencies. 
+    # Tagged builds can be done also 
+    $ centpkg build --srpm
 
-    root# <Download and configure the relevant epel-release RPM>
-    root# yum install pyrpkg
-    root# git clone https://bitbucket.org/bstinsonmhk/centpkg.git
-    root# cd centpkg
-    root# python setup.py install
-
-## Currently Somewhat-working Commands
-
-### Git Operations
-    $ centpkg clone --anonymous -b c7 a2ps        # clones the CentOS 7 branch of the a2ps package
-    $ centpkg add-tag                             # Adds a git tag to the repo
-    $ centpkg list-tag                            # Shows the relevant git tags
-    $ centpkg delete-tag                          # Shows the relevant git tags
-    $ centpkg commit                              # Commits to the current branch
-    $ centpkg pull                                # Pulls from the git remote
-    $ centpkg switch-branch                       # Switch to a git branch (if it exists upstream it will track it for you)
-
-### File/Working directory operations 
-    $ centpkg sources                             # Downloads the binary sources from lookaside and checks hashes
-    $ centpkg clean                               # Removes untracked files
-
-### Build Operations
-    $ centpkg local                               # Runs a full rpmbuild
-    $ centpkg compile                             # Runs rpmbuild -bc
-    $ centpkg verify-files                        # Runs rpmbuild -bl
-    $ centpkg mockbuild                           # Runs a local mockbuild
 
 ## License
 
