@@ -1,7 +1,7 @@
 %{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib())")}
 
 Name:		centpkg
-Version:	0.4.1
+Version:	0.4.2
 Release:	1%{?dist}
 Summary:	CentOS utility for working with dist-git
 
@@ -47,12 +47,15 @@ rm -rf %{buildroot}
 %files
 %defattr(-,root,root,-)
 %doc README.md COPYING
-%config(noreplace) %{_sysconfdir}/rpkg
+%config %{_sysconfdir}/rpkg/centpkg.conf
 %{_bindir}/%{name}
 %{python_sitelib}/*
 
 
 %changelog
+* Sun Dec 14 2014 Brian Stinson bstinson@ksu.edu - 0.4.2-1
+- Fix the koji config path in centpkg.conf
+
 * Sun Dec 14 2014 Brian Stinson bstinson@ksu.edu - 0.4.1-1
 - Fix a disttag regression and add a "patch" version number
 
