@@ -1,7 +1,7 @@
 %{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib())")}
 
 Name:		centpkg
-Version:	0.2
+Version:	0.4.1
 Release:	1%{?dist}
 Summary:	CentOS utility for working with dist-git
 
@@ -53,6 +53,9 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Sun Dec 14 2014 Brian Stinson bstinson@ksu.edu - 0.4.1-1
+- Fix a disttag regression and add a "patch" version number
+
 * Sat Nov 23 2014 Brian Stinson bstinson@ksu.edu - 0.2-1
 - The srpm workflow to the CBS works now
 
