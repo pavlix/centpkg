@@ -1,7 +1,7 @@
 %{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib())")}
 
 Name:		centpkg
-Version:	0.4.3
+Version:	0.4.4
 Release:	1%{?dist}
 Summary:	CentOS utility for working with dist-git
 
@@ -53,6 +53,9 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Sat Jan 31 2015 Brian Stinson bstinson@ksu.edu - 0.4.4-1
+- New version correcting the anonymous pull URLs
+
 * Sun Dec 14 2014 Brian Stinson bstinson@ksu.edu - 0.4.3-1
 - Use the authenticated git url for centpkg pulls
 

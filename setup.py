@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name = "centpkg",
-    version = "0.4.3",
+    version = "0.4.4",
     author = "Brian Stinson",
     author_email = "bstinson@ksu.edu",
     description = "CentOS Plugin to rpkg for managing RPM package sources",
