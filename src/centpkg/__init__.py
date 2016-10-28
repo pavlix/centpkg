@@ -31,14 +31,14 @@ class Commands(pyrpkg.Commands):
     def __init__(self, path, lookaside, lookasidehash, lookaside_cgi,
                  gitbaseurl, anongiturl, branchre, kojiconfig,
                  build_client, user=None, dist=None, target=None,
-                 quiet=False):
+                 quiet=False, distgit_namespaced=False):
         '''
             Init the object and some configuration details.
         '''
         super(Commands, self).__init__(path, lookaside, lookasidehash,
                                       lookaside_cgi, gitbaseurl, anongiturl,
                                       branchre, kojiconfig, build_client,
-                                      user, dist, target, quiet)
+                                      user, dist, target, quiet, distgit_namespaced)
 
     def _is_sigbranch(self):
         # if the current branch is not in the form c<version>, c<version>-plus,
