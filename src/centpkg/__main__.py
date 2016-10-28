@@ -31,6 +31,7 @@ def main():
     parser = argparse.ArgumentParser(add_help=False)
     parser.add_argument('-C', '--config', help='The rpkg config file to use',
                         default='/etc/rpkg/centpkg.conf')
+    parser.add_argument('command')
 
     (args, other) = parser.parse_known_args()
 
