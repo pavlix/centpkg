@@ -40,7 +40,7 @@ def main():
         sys.stderr.write('Invalid config file %s\n' % args.config)
         sys.exit(1)
 
-    config = configparser.SafeConfigParser()
+    config = configparser.ConfigParser()
     config.read(args.config)
 
     client = centpkg.cli.centpkgClient(config)
