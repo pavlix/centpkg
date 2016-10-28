@@ -72,6 +72,8 @@ def main():
         pass
     except Exception as e:
         log.error('Could not execute %s: %s' % (client.args.command.__name__, e))
+        if client.args.v:
+            raise
         sys.exit(1)
 
 if __name__ == '__main__':
