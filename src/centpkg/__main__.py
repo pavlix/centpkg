@@ -18,7 +18,7 @@ from __future__ import print_function
 import os
 import sys
 import logging
-import six.moves.configparser
+from six.moves import configparser
 import argparse
 
 import pyrpkg
@@ -39,7 +39,7 @@ def main():
         sys.stderr.write('Invalid config file %s\n' % args.config)
         sys.exit(1)
 
-    config = six.moves.configparser.SafeConfigParser()
+    config = configparser.SafeConfigParser()
     config.read(args.config)
 
     client = centpkg.cli.centpkgClient(config)
