@@ -16,6 +16,7 @@
 
 
 
+from __future__ import absolute_import
 import pyrpkg
 import os
 import re
@@ -98,7 +99,7 @@ class Commands(pyrpkg.Commands):
     def load_user(self):
         try:
             self._user = centos_cert.read_user_cert()
-        except Exception, e:
+        except Exception as e:
             super(Commands, self).load_user()
 
     # These are the commands defined in the base pyrpkg.Commands class
@@ -129,7 +130,7 @@ class Commands(pyrpkg.Commands):
             archives = open(os.path.join(self.path,
                                          '.{0}.metadata'.format(self.module_name)),
                             'r').readlines()
-        except IOError, e:
+        except IOError as e:
             raise pyrpkg.rpkgError('%s is not a valid repo: %s' % (self.path, e))
         # Default to putting the files where the module is
         if not outdir:

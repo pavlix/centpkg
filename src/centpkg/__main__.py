@@ -13,10 +13,12 @@
 # option) any later version.  See http://www.gnu.org/copyleft/gpl.html for
 # the full text of the license.
 
+from __future__ import absolute_import
+from __future__ import print_function
 import os
 import sys
 import logging
-import ConfigParser
+import six.moves.configparser
 import argparse
 
 import pyrpkg
@@ -37,7 +39,7 @@ def main():
         sys.stderr.write('Invalid config file %s\n' % args.config)
         sys.exit(1)
 
-    config = ConfigParser.SafeConfigParser()
+    config = six.moves.configparser.SafeConfigParser()
     config.read(args.config)
 
     client = centpkg.cli.centpkgClient(config)
@@ -67,7 +69,7 @@ def main():
         sys.exit(client.args.command())
     except KeyboardInterrupt:
         pass
-    except Exception, e:
+    except Exception as e:
         log.error('Could not execute %s: %s' % (client.args.command.__name__, e))
         sys.exit(1)
 

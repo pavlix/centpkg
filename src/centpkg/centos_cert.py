@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+from __future__ import print_function
 import os
 from OpenSSL import crypto
 import urlgrabber
@@ -40,10 +42,10 @@ def verify_cert():
     delta = datetime.datetime.now() + datetime.timedelta(days=21)
     warn = datetime.datetime.strftime(delta, dateFmt)
 
-    print 'cert expires: %s-%s-%s' % (valid_until[:4], valid_until[4:6], valid_until[6:8])
+    print('cert expires: %s-%s-%s' % (valid_until[:4], valid_until[4:6], valid_until[6:8]))
 
     if valid_until < warn:
-        print 'WARNING: Your cert expires soon.'
+        print('WARNING: Your cert expires soon.')
 
 
 def certificate_expired():

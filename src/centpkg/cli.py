@@ -13,6 +13,8 @@
 # option) any later version.  See http://www.gnu.org/copyleft/gpl.html for
 # the full text of the license.
 
+from __future__ import absolute_import
+from __future__ import print_function
 import sys
 import os
 import logging
